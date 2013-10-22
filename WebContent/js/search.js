@@ -17,7 +17,7 @@ $(function () {
 			console.log(this.el);
 		},
 		submit: function(){
-			alert('submit button is clicked');
+			alert('submit button is clicked' + $("#search").val());
 			console.log('submit button is clicked');
 		}
 	}); 
