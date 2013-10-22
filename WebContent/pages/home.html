@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Insert title here</title>
+ <script src="../lib/jquery-2.0.2.js" ></script>
+ <script src="../lib/underscore.js"></script>
+ <script src="../lib/bootstrap.js"></script>
+ <script src="../lib/backbone.js"></script>
+ <link   href="../css/bootstrap.css"  type="text/css" rel="stylesheet"></link>
+ <link   href="../css/bootstrap-responsive.css" type="text/css" rel="stylesheet" ></link>
+ <script src="../js/search.js" ></script>
+</head>
+<body class="container" >
+  <div class="navbar navbar-fixed-top" >
+   <div class="navbar-inner">
+    <div class="container" >
+     <form class="navbar-search " >
+      <div class="btn-group">
+       <button type="button"  class="btn btn-default dropdown-toggle" data-toggle="dropdown" >
+         Action <span class="caret"></span>
+       </button>
+       <ul class="dropdown-menu" role="menu" >
+        <li><a href="#">search by task id</a></li>
+        <li><a href="#">search by word</a></li>
+        <li><a href="#">Something else here</a></li>
+       </ul>
+      </div>
+      <input type="text" class="search-query" placeholder="Search" style="width:600px" />
+      <button id="submit" type="submit" class="btn btn-default">Submit</button>
+     </form>
+    </div>
+   </div>
+  </div>
+</body>
+</html>
