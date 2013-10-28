@@ -1,10 +1,22 @@
 $(function () {
-	var searchModel, searchButtonView, router;
+	var userModel, searchButtonView, router;
 	
-	searchModel = Backbone.Model.extend({
+	userModel = Backbone.Model.extend({
+		urlRoot:'https://joseph.kanbanery.com/api/v1/user.json?api_token=7d85a88c71f68a5d7082cf04e5a9da7b174a6ecb',
 		initialize: function(){
 			console.log('the model is initialized');
+		},
+		sync: function(method, model, options){
+			options.timeout= 10000;
+			options.dataType = 'jsonp';
+			Backbone.sync(method, model, options);
+			console.log('this is inside the sync method');
+		},
+		parse: function (response) {
+			console.log(response);
+			return response;
 		}
+		
 	});
 
 
@@ -30,7 +42,8 @@ $(function () {
 			Backbone.history.start();
 		},
 		home:function(){
-			var sModel = new searchModel();
+			var user = new userModel();
+			console.log(user.fetch());
 			var view  =  new searchButtonView({el:$("#submit")});
 		}
 	});	
