@@ -1,5 +1,5 @@
 $(function () {
-	var userModel, searchButtonView, router;
+	var userModel, searchButtonView, router, responses;
 	
 	userModel = Backbone.Model.extend({
 		urlRoot:'https://joseph.kanbanery.com/api/v1/user.json?api_token=7d85a88c71f68a5d7082cf04e5a9da7b174a6ecb',
@@ -9,11 +9,10 @@ $(function () {
 		sync: function(method, model, options){
 			options.timeout= 10000;
 			options.dataType = 'jsonp';
-			Backbone.sync(method, model, options);
-			console.log('this is inside the sync method');
+			return Backbone.sync(method, model, options);
 		},
 		parse: function (response) {
-			console.log(response);
+			responses = response;
 			return response;
 		}
 		
@@ -43,7 +42,12 @@ $(function () {
 		},
 		home:function(){
 			var user = new userModel();
-			console.log(user.fetch());
+			user.fetch({
+				complete: (function (e) {
+					console.log(responses);
+					alert(responses.email);
+				})
+			});
 			var view  =  new searchButtonView({el:$("#submit")});
 		}
 	});	
