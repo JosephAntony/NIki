@@ -1,17 +1,27 @@
 $(function () {
-	var userModel, searchButtonView, router;
+	var userModel, searchButtonView, router, project, projectId, apiToken, projectIdArray, projectNameArray;
 	
 	userModel = Backbone.Model.extend({
 		urlRoot:'https://joseph.kanbanery.com/api/v1/user.json?api_token=',
 		initialize: function(options){
-			this.urlRoot = this.urlRoot + options.api;
+			apiToken = options.api;
+			this.urlRoot = this.urlRoot + apiToken;
 		},
 		parse: function (response) {
 			return response;
 		}
 		
 	});
-
+   
+	project = Backbone.Model.extend({
+		urlRoot: 'https://kanbanery.com/api/v1/user/workspaces.json?api_token=',
+		initialize: function () {
+			this.urlRoot = this.urlRoot + apiToken;
+		},
+		parse: function (response){
+			return response;
+		},
+	});
 
 	searchButtonView = Backbone.View.extend({
 		events: {
@@ -51,7 +61,37 @@ $(function () {
 				})
 			});
 			var view  =  new searchButtonView({el:$("#nav")});
-		}
+			
+			//getting the project Model
+			var count = 0;
+			var prj = new project();
+			projectIdArray = new Array();
+			projectNameArray = new Array();
+			
+			//fetching the project json and looping through it 
+			prj.fetch({dataType: 'jsonp', asnyc:true,
+				        success: function (model, response) {
+				        	_.each(response[0].projects, function (projects) {
+				        		projectIdArray[count] = projects.id;
+				        		projectNameArray[count] = projects.name;
+				        		count++;
+				        	});
+				        	
+				        	_.each(projectNameArray, function (projectName) {
+				        		console.log(projectName);
+				        		$("#myProjectModal").find("#inputs").append('<span class="input-group-addon"><input type="radio"></span>');
+				        		$("#myProjectModal").find("#inputs").append('<span class="label label-info">'+projectName+'</span>');
+				        	});
+				        	$("#myProjectModal").modal();
+				        }
+				     });
+			
+			
+			
+			
+		}//end og the submit function
+		
+		
 	}); 
 	 
 	var appRouter = new router();	
