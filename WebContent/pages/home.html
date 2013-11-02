@@ -13,7 +13,27 @@
  <script src="../js/search.js" ></script>
 </head>
 <body class="container" >
-  <div class="navbar navbar-fixed-top" >
+
+
+   <!-- this is the modal --> 
+  <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <h3 id="myModalLabel">Login-Please Enter Api Token</h3>
+  </div>
+   
+    <div class="modal-body">
+      <div class="input-group">
+        <input id="apiToken" type="text" class="form-control" placeholder="Api Token">
+      </div>
+    </div>
+ 
+    <div class="modal-footer">
+      <button id="logIn" class="btn btn-primary">Log In</button>
+    </div>
+</div>
+
+
+  <div id="nav" class="navbar navbar-fixed-top" >
    <div class="navbar-inner">
     <div class="container" >
      <form class="navbar-search " >
@@ -30,8 +50,12 @@
       <input id="search" type="text" class="search-query" placeholder="Search" style="width:600px" />
       <button id="submit" type="submit" class="btn btn-default">Submit</button>
      </form>
+      <label id="userId" class="pull-right"><h4>  welcome,</h4></label>
     </div>
    </div>
   </div>
+  
+  
+  
 </body>
 </html>

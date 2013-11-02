@@ -1,18 +1,13 @@
 $(function () {
-	var userModel, searchButtonView, router, responses;
+	var userModel, searchButtonView, router;
 	
 	userModel = Backbone.Model.extend({
-		urlRoot:'https://joseph.kanbanery.com/api/v1/user.json?api_token=7d85a88c71f68a5d7082cf04e5a9da7b174a6ecb',
-		initialize: function(){
+		urlRoot:'https://joseph.kanbanery.com/api/v1/user.json?api_token=',
+		initialize: function(options){
 			console.log('the model is initialized');
-		},
-		sync: function(method, model, options){
-			options.timeout= 10000;
-			options.dataType = 'jsonp';
-			return Backbone.sync(method, model, options);
+			this.urlRoot = this.urlRoot + options.api;
 		},
 		parse: function (response) {
-			responses = response;
 			return response;
 		}
 		
@@ -21,7 +16,7 @@ $(function () {
 
 	searchButtonView = Backbone.View.extend({
 		events: {
-			"click": "submit",
+			"click #submit": "submit",
 		},
 		initialize: function() {
 			console.log('the view has been initialized');
@@ -41,17 +36,27 @@ $(function () {
 			Backbone.history.start();
 		},
 		home:function(){
-			var user = new userModel();
-			user.fetch({
-				complete: (function (e) {
-					console.log(responses);
-					alert(responses.email);
-				})
-			});
-			var view  =  new searchButtonView({el:$("#submit")});
+			var modelView =  new ModelView({el:$("#myModal")});
+			$("#myModal").modal();
 		}
 	});	
 	
+	var ModelView = Backbone.View.extend({
+		events : {
+			"click #logIn" :"submit",
+		},
+		submit : function () {
+			var user = new userModel({api:$("#apiToken").val()});
+			$("#myModal").modal('hide');
+			user.fetch({dataType:'jsonp',
+				success: (function (model, response) {
+					$("#userId").html('<h4>Welcome,'+ response.first_name + '</h4>');
+				})
+			});
+			var view  =  new searchButtonView({el:$("#nav")});
+		}
+	}); 
+	 
 	var appRouter = new router();	
 	
 });

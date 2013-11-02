@@ -27,11 +27,12 @@ $(function() {
 		},
 		
 		home: function () {
+			$("#myModal").modal();
 			var m = new model();
 			m.fetch({
 				complete: (function (e) {
 					console.log(responses);
-					alert(responses.email);
+					//alert(responses.email);
 				})
 			});
 			
