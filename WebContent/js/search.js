@@ -4,7 +4,6 @@ $(function () {
 	userModel = Backbone.Model.extend({
 		urlRoot:'https://joseph.kanbanery.com/api/v1/user.json?api_token=',
 		initialize: function(options){
-			console.log('the model is initialized');
 			this.urlRoot = this.urlRoot + options.api;
 		},
 		parse: function (response) {
@@ -19,8 +18,6 @@ $(function () {
 			"click #submit": "submit",
 		},
 		initialize: function() {
-			console.log('the view has been initialized');
-			console.log(this.el);
 		},
 		submit: function(){
 			alert('submit button is clicked' + $("#search").val());
