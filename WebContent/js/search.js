@@ -1,28 +1,8 @@
 $(function () {
-	var userModel, searchButtonView, router, project, projectId, apiToken, projectIdArray, projectNameArray;
+	var commonmodel, ModelView, appRouter, projectModal, searchButtonView, router, projectId, apiToken, projectIdArray, projectNameArray, selectedProjectName;
 	
-	userModel = Backbone.Model.extend({
-		urlRoot:'https://joseph.kanbanery.com/api/v1/user.json?api_token=',
-		initialize: function(options){
-			apiToken = options.api;
-			this.urlRoot = this.urlRoot + apiToken;
-		},
-		parse: function (response) {
-			return response;
-		}
-		
-	});
-   
-	project = Backbone.Model.extend({
-		urlRoot: 'https://kanbanery.com/api/v1/user/workspaces.json?api_token=',
-		initialize: function () {
-			this.urlRoot = this.urlRoot + apiToken;
-		},
-		parse: function (response){
-			return response;
-		},
-	});
-
+	commonmodel = model.kanbaneryModel;
+	
 	searchButtonView = Backbone.View.extend({
 		events: {
 			"click #submit": "submit",
@@ -45,15 +25,37 @@ $(function () {
 		home:function(){
 			var modelView =  new ModelView({el:$("#myModal")});
 			$("#myModal").modal();
+			
 		}
 	});	
 	
-	var ModelView = Backbone.View.extend({
+	projectModal = Backbone.View.extend({
+			events: {
+				"click #btnGo" : "btnGo",
+			},
+			btnGo : function (event) {
+				selectedProjectName = $("#inputs").find("input[type='radio']:radio:checked").attr('value');
+				$("#myProjectModal").modal('hide');
+			},
+			initialize: function () {
+				
+				$("#inputs").append('<span class="input-group-addon"></span>');
+	        	_.each(projectNameArray, function (projectName) {
+	        		console.log(projectName);
+	        		$("#inputs").find('.input-group-addon').append('<input type="radio" name="projectName" value="' + projectName + 
+	        				'"><span class="label label-info">' + projectName + ' </span> ');
+	        	});
+				$("#myProjectModal").modal();
+			},
+	}); 
+	 
+	ModelView = Backbone.View.extend({
 		events : {
 			"click #logIn" :"submit",
 		},
-		submit : function () {
-			var user = new userModel({api:$("#apiToken").val()});
+		submit : function (event) {
+			apiToken = $("#apiToken").val();
+			var user = new commonmodel({urlRoot: userJsonURL.url + apiToken });
 			$("#myModal").modal('hide');
 			user.fetch({dataType:'jsonp',
 				success: (function (model, response) {
@@ -64,7 +66,7 @@ $(function () {
 			
 			//getting the project Model
 			var count = 0;
-			var prj = new project();
+			var prj = new commonmodel({urlRoot: workSpaceJsonURL.url + apiToken});
 			projectIdArray = new Array();
 			projectNameArray = new Array();
 			
@@ -76,13 +78,7 @@ $(function () {
 				        		projectNameArray[count] = projects.name;
 				        		count++;
 				        	});
-				        	
-				        	_.each(projectNameArray, function (projectName) {
-				        		console.log(projectName);
-				        		$("#myProjectModal").find("#inputs").append('<span class="input-group-addon"><input type="radio"></span>');
-				        		$("#myProjectModal").find("#inputs").append('<span class="label label-info">'+projectName+'</span>');
-				        	});
-				        	$("#myProjectModal").modal();
+				        	var prjModal = new projectModal({ el : $("#myProjectModal")});
 				        }
 				     });
 			
@@ -94,7 +90,9 @@ $(function () {
 		
 	}); 
 	 
-	var appRouter = new router();	
+	
+	
+	appRouter = new router();	
 	
 });
 
