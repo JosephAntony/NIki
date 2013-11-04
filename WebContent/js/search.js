@@ -20,7 +20,8 @@ $(function () {
 				ids[0] = id;
 			}
 			
-			var coltn = new Modelcollection.collection({model: model.kanbaneryModel, url: columnJsonURL.url + projectId + '/columns.json?api_token=' + apiToken});
+			var columnModel;
+			var coltn = new Modelcollection.collection({model: model.kanbaneryModel, url: taskJsonURL.url + projectId + '/tasks.json?api_token=' + apiToken});
 			coltn.fetch({dataType: 'jsonp', 
 				         success: function (collection, response) {
 				            $("#searchResults").empty();
@@ -29,11 +30,16 @@ $(function () {
 				            	_.each(response, function (object) {
 				            		
 				            		if (object.id == id.trim()) {
-				            			$("#searchResults").append("<div class='row' ><div id='" + id + "' style='border: solid 1px; height:50px ;" +
-					            				"font-family: Arial, Helvetica Neue, Helvetica, sans-serif ' class='span6'> Task Id- <span class='label label-info'> " + 
-					            				object.id + '</span>  is in <p style="font-family:  Arial-Black, Arial Bold, Gadget, sans-serif;" >  ' + object.name.toUpperCase()   + 
-					            				' Column <p> ' + "</div></div>");
-					            		$("#searchResults").animate({opacity:1}, "slow");
+				            			columnModel = new model.kanbaneryModel({urlRoot: columnJsonURL.url  + object.column_id + ".json?api_token=" + apiToken});
+				            			columnModel.fetch({dataType: 'jsonp',
+				            				  success: function (model, response) {
+				            					  $("#searchResults").append("<div class='row' ><div id='" + id + "' style='border: solid 1px; height:50px ;" +
+								            				"font-family: Arial, Helvetica Neue, Helvetica, sans-serif ' class='span6'> Task Id- <span class='label label-info'> " + 
+								            				object.id + '</span>  is in <p style="font-family:  Arial-Black, Arial Bold, Gadget, sans-serif;" >  ' + response.name.toUpperCase()   + 
+								            				' Column <p> ' + "</div></div>");
+								            		$("#searchResults").animate({opacity:1}, "slow");
+				            				  }
+				            				});
 					            		flag = true;
 				            		}
 				            	});
