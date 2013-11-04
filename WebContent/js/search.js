@@ -11,11 +11,19 @@ $(function () {
 		},
 		submit: function(){
 			//alert('submit button is clicked' + $("#search").val());
+			var ids = new Array();
+			var flag = false;
 			var id = $("#search").val();
+			if(id.indexOf(",") !== -1){
+				ids = $("#search").val().split(",");	
+			} else {
+				ids[0] = id;
+			}
+			
 			var coltn = new Modelcollection.collection({model: model.kanbaneryModel, url: columnJsonURL.url + projectId + '/columns.json?api_token=' + apiToken});
 			coltn.fetch({dataType: 'jsonp', 
 				         success: function (collection, response) {
-				            _.each(response, function (object) {
+				           /* _.each(response, function (object) {
 				            	if(object.id == id) {
 				            		//alert('THE NAME OF THE COLUMNS    ' + object.name);
 				            		$("#searchResults").append("<div class='row' ><div id='" + id + "' style='border: solid 1px; height:50px ;" +
@@ -25,7 +33,34 @@ $(function () {
 				            		$("#searchResults").animate({opacity:1}, "slow");
 				            		
 				            	}
+				            	
+				            	
+				            });*/
+				            
+				            _.each(ids, function (id) {
+				            	flag = false;
+				            	_.each(response, function (object) {
+				            		
+				            		if (object.id == id.trim()) {
+				            			$("#searchResults").append("<div class='row' ><div id='" + id + "' style='border: solid 1px; height:50px ;" +
+					            				"font-family: Arial, Helvetica Neue, Helvetica, sans-serif ' class='span6'> Task Id- <span class='label label-info'> " + 
+					            				object.id + '</span>  is in <p style="font-family:  Arial-Black, Arial Bold, Gadget, sans-serif;" >  ' + object.name.toUpperCase()   + 
+					            				' Column <p> ' + "</div></div>");
+					            		$("#searchResults").animate({opacity:1}, "slow");
+					            		flag = true;
+				            		}
+				            	});
+				            	
+				            	if (!flag) {
+				            		$("#searchResults").append("<div class='row' ><div  style='border: solid 1px; height:50px ;" +
+				            				"font-family: Arial, Helvetica Neue, Helvetica, sans-serif ' class='span6'> <span class='label label-info'> " + 
+				            				id + '</span>  Not found <p style="font-family:  Arial-Black, Arial Bold, Gadget, sans-serif;" >  ' +
+				            				'<p> ' + "</div></div>");
+				            		$("#searchResults").animate({opacity:1}, "slow");
+				            	}
+				            	
 				            });
+				            
 			             } });
 		},
 	}); 
