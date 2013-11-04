@@ -36,7 +36,7 @@ $(function () {
 				            	
 				            	
 				            });*/
-				            
+				            $("#searchResults").empty();
 				            _.each(ids, function (id) {
 				            	flag = false;
 				            	_.each(response, function (object) {
