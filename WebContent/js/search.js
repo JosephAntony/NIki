@@ -15,7 +15,7 @@ $(function () {
 			var flag = false;
 			var id = $("#search").val();
 			if(id.indexOf(",") !== -1){
-				ids = $("#search").val().split(",");	
+				ids = id.split(",");	
 			} else {
 				ids[0] = id;
 			}
@@ -25,8 +25,9 @@ $(function () {
 			coltn.fetch({dataType: 'jsonp', 
 				         success: function (collection, response) {
 				            $("#searchResults").empty();
-				            _.each(ids, function (id) {
+				            _.each(ids, function ( id ) {
 				            	flag = false;
+				            	id = checkHashTag(id.trim());
 				            	_.each(response, function (object) {
 				            		
 				            		if (object.id == id.trim()) {
@@ -37,7 +38,7 @@ $(function () {
 								            				"font-family: Arial, Helvetica Neue, Helvetica, sans-serif ' class='span6'> Task Id- <span class='label label-info'> " + 
 								            				object.id + '</span>  is in <p style="font-family:  Arial-Black, Arial Bold, Gadget, sans-serif;" >  ' + response.name.toUpperCase()   + 
 								            				' Column <p> ' + "</div></div>");
-								            		$("#searchResults").animate({opacity:1}, "slow");
+								            		$("#searchResults").animate({opacity:1}, 2000);
 				            				  }
 				            				});
 					            		flag = true;
@@ -57,6 +58,13 @@ $(function () {
 			             } });
 		},
 	}); 
+	
+	function checkHashTag (id) {
+		if (id.indexOf("#") != -1) {
+			return id.substring(1, id.length); 
+		}
+		return id;
+	};
 	
 	 router = Backbone.Router.extend({
 		routes : {
