@@ -17,7 +17,13 @@ $(function () {
 				         success: function (collection, response) {
 				            _.each(response, function (object) {
 				            	if(object.id == id) {
-				            		alert('THE NAME OF THE COLUMNS    ' + object.name);
+				            		//alert('THE NAME OF THE COLUMNS    ' + object.name);
+				            		$("#searchResults").append("<div class='row' ><div id='" + id + "' style='border: solid 1px; height:50px ;" +
+				            				"font-family: Arial, Helvetica Neue, Helvetica, sans-serif ' class='span6'> Task Id- <span class='label label-info'> " + 
+				            				object.id + '</span>  is in <p style="font-family:  Arial-Black, Arial Bold, Gadget, sans-serif;" >  ' + object.name.toUpperCase()   + 
+				            				' Column <p> ' + "</div></div>");
+				            		$("#searchResults").animate({opacity:1}, "slow");
+				            		
 				            	}
 				            });
 			             } });
